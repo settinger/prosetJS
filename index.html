@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Projective Set</title>
+    <link rel="stylesheet" type="text/css" href="proset-style.css">
+  </head>
+  <body>
+    <header>
+      <h1>Projective Set</h1>
+      <h2>a game about projective sets</h2>
+      <div id="score">
+        <div>Click a card to choose difficulty level (fewer dots: easier; more dots: harder)</div>
+      </div>
+    </header>
+    <div id="baize">
+      <!-- -->
+    </div>
+    <div class="rules">
+      <p><b>Rule:</b> Select a set of cards such that there is an even number of dots each color.</p>
+    </div>
+    <script src="proset-main.js"></script>
+    <script>
+      var game = new Proset();
+    </script>
+  </body>
+</html>
