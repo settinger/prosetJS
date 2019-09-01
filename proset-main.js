@@ -245,8 +245,9 @@ function startGame(game, difficulty) {
   $score.innerHTML = `<div id="timer"><span id="timerspan"></span></div><div id="cardsleft"><span id="cardsspan"></span></div>`
 
   // Initialize timer
-  const initialTime = new Date();
+  let initialTime = new Date();
   game.$timer = document.getElementById("timerspan");
+  clearInterval(game.timerFunction);
   game.timerFunction = setInterval(function () {updateTimer(initialTime, game.$timer)},100);
 
   // Initialize Cards-remaining counter
@@ -365,6 +366,12 @@ function keyDown(event, game, deck, level) {
     case 'Digit0':
       if (level > 8) wasClicked(game.slots[9], game, deck, level);
       break;
+    case 'KeyC':
+      clearSelected(game, level);
+      break;
+    case 'KeyR':
+      //startGame(game, level);
+      break;
   }
 }
 
@@ -393,4 +400,12 @@ function keyStartGame(game, event) {
       startGame(game, 9);
       break;
   }
+}
+
+function clearSelected(game, level) {
+  for (let slot of game.slots) {
+    // Unselect cardslot class
+    slot.slot.classList.remove("selected");
+  }
+  game.selected = [];
 }
