@@ -89,6 +89,7 @@ class Proset {
 
   Init() {
     const baize = document.getElementById("baize");
+    baize.innerHTML = ''
     let numRows = 3;
     // Initialize three rows
     let row0 = new CardRow(0);
@@ -404,12 +405,12 @@ function keyDown(event, game, level) {
     case 'KeyR':
       game.startGame(level);
       break;
-    // case 'Escape':
-    //   // Replace "score" div text
-    //   document.getElementById("score").innerHTML = `<div>Click a card to choose difficulty level (fewer dots: easier; more dots: harder)</div>`;
-    //   // Add a window listener for keypresses
-    //   window.addEventListener('keydown', this.difficultyListener);
-    //   game.startGame('');
+    case 'Escape':
+      // Replace "score" div text
+      document.getElementById("score").innerHTML = `<div>Click a card to choose difficulty level (fewer dots: easier; more dots: harder)</div>`;
+      // Add a window listener for keypresses
+      window.addEventListener('keydown', this.difficultyListener);
+      game = new Proset();
   }
 }
 
