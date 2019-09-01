@@ -83,7 +83,7 @@ class Card {
 
 class Proset {
   constructor() {
-    this.difficultyListener = e => keyStartGame(this, e);
+    this.difficultyListener = e => this.keyStartGame(e);
     this.Init();
   }
 
@@ -104,22 +104,181 @@ class Proset {
     let slot6 = row2.addSlot(6);
     // Initialize seven cards: 7, 15, 31, 63, 127, 255, 511
     slot0.addCard(7);
-    slot0.slot.onclick = function() {startGame(this, 3);};
+    slot0.slot.onclick = () => this.startGame(3);
     slot1.addCard(15);
-    slot1.slot.onclick = function() {startGame(this, 4);};
+    slot1.slot.onclick = () => this.startGame(4);
     slot2.addCard(31);
-    slot2.slot.onclick = function() {startGame(this, 5);};
+    slot2.slot.onclick = () => this.startGame(5);
     slot3.addCard(63);
-    slot3.slot.onclick = function() {startGame(this, 6);};
+    slot3.slot.onclick = () => this.startGame(6);
     slot4.addCard(127);
-    slot4.slot.onclick = function() {startGame(this, 7);};
+    slot4.slot.onclick = () => this.startGame(7);
     slot5.addCard(255);
-    slot5.slot.onclick = function() {startGame(this, 8);};
+    slot5.slot.onclick = () => this.startGame(8);
     slot6.addCard(511);
-    slot6.slot.onclick = function() {startGame(this, 9);};
+    slot6.slot.onclick = () => this.startGame(9);
     // Add a window listener for keypresses
     window.addEventListener('keydown', this.difficultyListener);
   }
+
+  keyStartGame(event) {
+    let key = event.code;
+    switch (key) {
+      case 'Digit1':
+        this.startGame(3);
+        break;
+      case 'Digit2':
+        this.startGame(4);
+        break;
+      case 'Digit3':
+        this.startGame(5);
+        break;
+      case 'Digit4':
+        this.startGame(6);
+        break;
+      case 'Digit5':
+        this.startGame(7);
+        break;
+      case 'Digit6':
+        this.startGame(8);
+        break;
+      case 'Digit7':
+        this.startGame(9);
+        break;
+    }
+    window.removeEventListener('keydown', this.difficultyListener);
+  }
+
+  startGame(difficulty) {
+    // Delete existing keyboard listener
+    window.removeEventListener('keydown', this.difficultyListener);
+    
+    // Delete existing rows
+    const baize = document.getElementById("baize");
+    baize.innerHTML = ''
+  
+    this.row0 = new CardRow(0);
+    this.row1 = new CardRow(1);
+    this.row2 = new CardRow(2);
+  
+    // Initialize N+1 card slots in appropriate places
+    switch (difficulty) {
+      case 3:
+        this.slot0 = this.row0.addSlot(0);
+        this.slot1 = this.row0.addSlot(1);
+        this.slot2 = this.row1.addSlot(2);
+        this.slot3 = this.row1.addSlot(3);
+        this.slots = [this.slot0, this.slot1, this.slot2, this.slot3];
+        break;
+      case 4:
+        this.slot0 = this.row0.addSlot(0);
+        this.slot1 = this.row0.addSlot(1);
+        this.slot2 = this.row1.addSlot(2);
+        this.slot3 = this.row1.addSlot(3);
+        this.slot4 = this.row1.addSlot(4);
+        this.slots = [this.slot0, this.slot1, this.slot2, this.slot3, this.slot4];
+        break;
+      case 5:
+        this.slot0 = this.row0.addSlot(0);
+        this.slot1 = this.row0.addSlot(1);
+        this.slot2 = this.row1.addSlot(2);
+        this.slot99 = this.row1.addSlot(99);
+        this.slot3 = this.row1.addSlot(3);
+        this.slot4 = this.row2.addSlot(4);
+        this.slot5 = this.row2.addSlot(5);
+        this.slots = [this.slot0, this.slot1, this.slot2, this.slot3, this.slot4, this.slot5];
+        break;
+      case 6:
+        this.slot0 = this.row0.addSlot(0);
+        this.slot1 = this.row0.addSlot(1);
+        this.slot2 = this.row1.addSlot(2);
+        this.slot3 = this.row1.addSlot(3);
+        this.slot4 = this.row1.addSlot(4);
+        this.slot5 = this.row2.addSlot(5);
+        this.slot6 = this.row2.addSlot(6);
+        this.slots = [this.slot0, this.slot1, this.slot2, this.slot3, this.slot4, this.slot5, this.slot6];
+        break;
+      case 7:
+        this.slot0 = this.row0.addSlot(0);
+        this.slot1 = this.row0.addSlot(1);
+        this.slot2 = this.row0.addSlot(2);
+        this.slot3 = this.row1.addSlot(3);
+        this.slot4 = this.row1.addSlot(4);
+        this.slot5 = this.row2.addSlot(5);
+        this.slot6 = this.row2.addSlot(6);
+        this.slot7 = this.row2.addSlot(7);
+        this.slots = [this.slot0, this.slot1, this.slot2, this.slot3, this.slot4, this.slot5, this.slot6, this.slot7];
+        break;
+      case 8:
+        this.slot0 = this.row0.addSlot(0);
+        this.slot1 = this.row0.addSlot(1);
+        this.slot2 = this.row0.addSlot(2);
+        this.slot3 = this.row1.addSlot(3);
+        this.slot4 = this.row1.addSlot(4);
+        this.slot5 = this.row1.addSlot(5);
+        this.slot6 = this.row2.addSlot(6);
+        this.slot7 = this.row2.addSlot(7);
+        this.slot8 = this.row2.addSlot(8);
+        this.slots = [this.slot0, this.slot1, this.slot2, this.slot3, this.slot4, this.slot5, this.slot6, this.slot7, this.slot8];
+        break;
+      case 9:
+        this.slot0 = this.row0.addSlot(0);
+        this.slot1 = this.row0.addSlot(1);
+        this.slot2 = this.row0.addSlot(2);
+        this.slot3 = this.row1.addSlot(3);
+        this.slot4 = this.row1.addSlot(4);
+        this.slot5 = this.row1.addSlot(5);
+        this.slot6 = this.row1.addSlot(6);
+        this.slot7 = this.row2.addSlot(7);
+        this.slot8 = this.row2.addSlot(8);
+        this.slot9 = this.row2.addSlot(9);
+        this.slots = [this.slot0, this.slot1, this.slot2, this.slot3, this.slot4, this.slot5, this.slot6, this.slot7, this.slot8, this.slot9];
+        break;
+      default:
+        this.Init();
+    }
+    this.deck = new Deck(2**difficulty);
+    this.deck.shuffle();
+    for (let slot of this.slots) {
+      this.deck.deal(slot);
+    }
+    // Remove the "choose difficulty" text
+    let $score = document.getElementById("score");
+    $score.innerHTML = `<div id="timer"><span id="timerspan"></span></div><div id="cardsleft"><span id="cardsspan"></span></div>`
+  
+    // Initialize timer
+    let initialTime = new Date();
+    this.$timer = document.getElementById("timerspan");
+    clearInterval(this.timerFunction);
+    this.timerFunction = setInterval(() => this.updateTimer(initialTime, this.$timer),100);
+  
+    // Initialize Cards-remaining counter
+    this.$cardsLeft = document.getElementById("cardsspan");
+    this.$cardsLeft.textContent = `Cards in deck: ${this.deck.deck.length}`;
+  
+    // Set onClick functions
+    for (let startSlot of this.slots) {
+      //startSlot.slot.onclick = function() {wasClicked(startSlot, game, deck, difficulty);};
+      startSlot.slot.addEventListener('mousedown', (e) => wasClicked(startSlot, game, difficulty) );
+    }
+  
+    // Remove existing window listener for keypresses
+    // Add new window listener for keypresses
+    if (typeof(this.keyListener) === 'undefined') {
+      this.keyListener = (e) => keyDown(event, this, difficulty);
+      window.addEventListener('keydown', this.keyListener);
+    }
+  
+    // Initialize array of selected slots
+    this.selected = [];
+  }
+
+  updateTimer(init, $timer) {
+    let elapsed = new Date() - init;
+    let timeStr = new Date(elapsed).toISOString().substr(11, 8);
+    $timer.textContent = timeStr;
+  }
+
 }
 
 class Deck {
@@ -147,134 +306,7 @@ class Deck {
   }
 }
 
-function startGame(game, difficulty) {
-  // Delete existing keyboard listener
-  window.removeEventListener('keydown', game.difficultyListener);
-  
-  // Delete existing rows
-  const baize = document.getElementById("baize");
-  baize.innerHTML = ''
-
-  game.row0 = new CardRow(0);
-  game.row1 = new CardRow(1);
-  game.row2 = new CardRow(2);
-
-  // Initialize N+1 card slots in appropriate places
-  switch (difficulty) {
-    case 3:
-      game.slot0 = game.row0.addSlot(0);
-      game.slot1 = game.row0.addSlot(1);
-      game.slot2 = game.row1.addSlot(2);
-      game.slot3 = game.row1.addSlot(3);
-      game.slots = [game.slot0, game.slot1, game.slot2, game.slot3];
-      break;
-    case 4:
-      game.slot0 = game.row0.addSlot(0);
-      game.slot1 = game.row0.addSlot(1);
-      game.slot2 = game.row1.addSlot(2);
-      game.slot3 = game.row1.addSlot(3);
-      game.slot4 = game.row1.addSlot(4);
-      game.slots = [game.slot0, game.slot1, game.slot2, game.slot3, game.slot4];
-      break;
-    case 5:
-      game.slot0 = game.row0.addSlot(0);
-      game.slot1 = game.row0.addSlot(1);
-      game.slot2 = game.row1.addSlot(2);
-      game.slot99 = game.row1.addSlot(99);
-      game.slot3 = game.row1.addSlot(3);
-      game.slot4 = game.row2.addSlot(4);
-      game.slot5 = game.row2.addSlot(5);
-      game.slots = [game.slot0, game.slot1, game.slot2, game.slot3, game.slot4, game.slot5];
-      break;
-    case 6:
-      game.slot0 = game.row0.addSlot(0);
-      game.slot1 = game.row0.addSlot(1);
-      game.slot2 = game.row1.addSlot(2);
-      game.slot3 = game.row1.addSlot(3);
-      game.slot4 = game.row1.addSlot(4);
-      game.slot5 = game.row2.addSlot(5);
-      game.slot6 = game.row2.addSlot(6);
-      game.slots = [game.slot0, game.slot1, game.slot2, game.slot3, game.slot4, game.slot5, game.slot6];
-      break;
-    case 7:
-      game.slot0 = game.row0.addSlot(0);
-      game.slot1 = game.row0.addSlot(1);
-      game.slot2 = game.row0.addSlot(2);
-      game.slot3 = game.row1.addSlot(3);
-      game.slot4 = game.row1.addSlot(4);
-      game.slot5 = game.row2.addSlot(5);
-      game.slot6 = game.row2.addSlot(6);
-      game.slot7 = game.row2.addSlot(7);
-      game.slots = [game.slot0, game.slot1, game.slot2, game.slot3, game.slot4, game.slot5, game.slot6, game.slot7];
-      break;
-    case 8:
-      game.slot0 = game.row0.addSlot(0);
-      game.slot1 = game.row0.addSlot(1);
-      game.slot2 = game.row0.addSlot(2);
-      game.slot3 = game.row1.addSlot(3);
-      game.slot4 = game.row1.addSlot(4);
-      game.slot5 = game.row1.addSlot(5);
-      game.slot6 = game.row2.addSlot(6);
-      game.slot7 = game.row2.addSlot(7);
-      game.slot8 = game.row2.addSlot(8);
-      game.slots = [game.slot0, game.slot1, game.slot2, game.slot3, game.slot4, game.slot5, game.slot6, game.slot7, game.slot8];
-      break;
-    case 9:
-      game.slot0 = game.row0.addSlot(0);
-      game.slot1 = game.row0.addSlot(1);
-      game.slot2 = game.row0.addSlot(2);
-      game.slot3 = game.row1.addSlot(3);
-      game.slot4 = game.row1.addSlot(4);
-      game.slot5 = game.row1.addSlot(5);
-      game.slot6 = game.row1.addSlot(6);
-      game.slot7 = game.row2.addSlot(7);
-      game.slot8 = game.row2.addSlot(8);
-      game.slot9 = game.row2.addSlot(9);
-      game.slots = [game.slot0, game.slot1, game.slot2, game.slot3, game.slot4, game.slot5, game.slot6, game.slot7, game.slot8, game.slot9];
-      break;
-    default:
-      this.Init();
-  }
-  let deck = new Deck(2**difficulty);
-  deck.shuffle();
-  for (let slot of game.slots) {
-    deck.deal(slot);
-  }
-  // Remove the "choose difficulty" text
-  let $score = document.getElementById("score");
-  $score.innerHTML = `<div id="timer"><span id="timerspan"></span></div><div id="cardsleft"><span id="cardsspan"></span></div>`
-
-  // Initialize timer
-  let initialTime = new Date();
-  game.$timer = document.getElementById("timerspan");
-  clearInterval(game.timerFunction);
-  game.timerFunction = setInterval(function () {updateTimer(initialTime, game.$timer)},100);
-
-  // Initialize Cards-remaining counter
-  game.$cardsLeft = document.getElementById("cardsspan");
-  game.$cardsLeft.textContent = `Cards in deck: ${deck.deck.length}`;
-
-  // Set onClick functions
-  for (let startSlot of game.slots) {
-    //startSlot.slot.onclick = function() {wasClicked(startSlot, game, deck, difficulty);};
-    startSlot.slot.addEventListener('mousedown', function(e) {wasClicked(startSlot, game, deck, difficulty);});
-  }
-
-  // Remove existing window listener for keypresses
-  // Add new window listener for keypresses
-  window.addEventListener('keydown', function(event) {keyDown(event, game, deck, difficulty)});
-
-  // Initialize array of selected slots
-  game.selected = [];
-}
-
-function updateTimer(init, $timer) {
-  let elapsed = new Date() - init;
-  let timeStr = new Date(elapsed).toISOString().substr(11, 8);
-  $timer.textContent = timeStr;
-}
-
-function wasClicked(slot, game, deck, level) {
+function wasClicked(slot, game, level) {
   // Check if clicked slot has a card in it
   if (slot.hasCard) {
     // Toggle selected status of card
@@ -297,16 +329,16 @@ function wasClicked(slot, game, deck, level) {
         if (game.selected.includes(cardslot.cardVal)) {
           cardslot.slot.classList.remove("selected");
           cardslot.removeCard();
-          if (deck.deck.length>0) {
-            cardslot.addCard(deck.deck.pop());
+          if (game.deck.deck.length>0) {
+            cardslot.addCard(game.deck.deck.pop());
           }
         }
       }
-      game.$cardsLeft.textContent = `Cards in deck: ${deck.deck.length}`
+      game.$cardsLeft.textContent = `Cards in deck: ${game.deck.deck.length}`
       game.selected = [];
       // check for win condition
       // if win: stop timer
-      if (won(game, deck)) {
+      if (won(game, game.deck)) {
         clearInterval(game.timerFunction);
         game.$timer.style = "color:blue";
         game.$cardsLeft.style = "color:blue";
@@ -333,72 +365,51 @@ function won(game, deck) {
   return true;
 }
 
-function keyDown(event, game, deck, level) {
+function keyDown(event, game, level) {
   let key = event.code;
   switch (key) {
     case 'Digit1':
-      if (level > 0) wasClicked(game.slots[0], game, deck, level);
+      if (level > 0) wasClicked(game.slots[0], game, level);
       break;
     case 'Digit2':
-      if (level > 1) wasClicked(game.slots[1], game, deck, level);
+      if (level > 1) wasClicked(game.slots[1], game, level);
       break;
     case 'Digit3':
-      if (level > 2) wasClicked(game.slots[2], game, deck, level);
+      if (level > 2) wasClicked(game.slots[2], game, level);
       break;
     case 'Digit4':
-      if (level > 2) wasClicked(game.slots[3], game, deck, level);
+      if (level > 2) wasClicked(game.slots[3], game, level);
       break;
     case 'Digit5':
-      if (level > 3) wasClicked(game.slots[4], game, deck, level);
+      if (level > 3) wasClicked(game.slots[4], game, level);
       break;
     case 'Digit6':
-      if (level > 4) wasClicked(game.slots[5], game, deck, level);
+      if (level > 4) wasClicked(game.slots[5], game, level);
       break;
     case 'Digit7':
-      if (level > 5) wasClicked(game.slots[6], game, deck, level);
+      if (level > 5) wasClicked(game.slots[6], game, level);
       break;
     case 'Digit8':
-      if (level > 6) wasClicked(game.slots[7], game, deck, level);
+      if (level > 6) wasClicked(game.slots[7], game, level);
       break;
     case 'Digit9':
-      if (level > 7) wasClicked(game.slots[8], game, deck, level);
+      if (level > 7) wasClicked(game.slots[8], game, level);
       break;
     case 'Digit0':
-      if (level > 8) wasClicked(game.slots[9], game, deck, level);
+      if (level > 8) wasClicked(game.slots[9], game, level);
       break;
     case 'KeyC':
       clearSelected(game, level);
       break;
     case 'KeyR':
-      //startGame(game, level);
+      game.startGame(level);
       break;
-  }
-}
-
-function keyStartGame(game, event) {
-  let key = event.code;
-  switch (key) {
-    case 'Digit1':
-      startGame(game, 3);
-      break;
-    case 'Digit2':
-      startGame(game, 4);
-      break;
-    case 'Digit3':
-      startGame(game, 5);
-      break;
-    case 'Digit4':
-      startGame(game, 6);
-      break;
-    case 'Digit5':
-      startGame(game, 7);
-      break;
-    case 'Digit6':
-      startGame(game, 8);
-      break;
-    case 'Digit7':
-      startGame(game, 9);
-      break;
+    // case 'Escape':
+    //   // Replace "score" div text
+    //   document.getElementById("score").innerHTML = `<div>Click a card to choose difficulty level (fewer dots: easier; more dots: harder)</div>`;
+    //   // Add a window listener for keypresses
+    //   window.addEventListener('keydown', this.difficultyListener);
+    //   game.startGame('');
   }
 }
 
