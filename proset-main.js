@@ -93,7 +93,6 @@ class Card {
 class Proset {
   constructor() {
     this.difficultyListener = e => this.keyStartGame(e);
-    this.touchDifficultyListener = e => console.dir(e);
     this.Init();
   }
 
