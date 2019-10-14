@@ -1,7 +1,7 @@
 * {
   margin: 0;
   box-sizing: border-box;
-  touch-action: none;
+  touch-action: manipulation;
 }
 
 /* Ideal dimensions: 6.5x10 */
