@@ -325,9 +325,10 @@ class Proset {
     // Set onClick functions
     for (let startSlot of this.slots) {
       //startSlot.slot.onclick = function() {wasClicked(startSlot, game, deck, difficulty);};
-      startSlot.slot.addEventListener("pointerdown", e =>
-        wasClicked(startSlot, game, difficulty)
-      );
+      startSlot.slot.addEventListener("pointerdown", e => {
+        e.preventDefault();
+        wasClicked(startSlot, game, difficulty);
+      });
     }
 
     // Remove existing window listener for keypresses
