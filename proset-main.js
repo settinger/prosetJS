@@ -130,6 +130,19 @@ class Proset {
     slot6.slot.onclick = () => this.startGame(9);
     // Add a window listener for keypresses
     window.addEventListener("keydown", this.difficultyListener);
+
+    // Add buttons for "new {level}-dot game" or "change difficulty"
+    const buttonMenu = document.getElementById("button-menu")
+    buttonMenu.style.display = "block"
+    const newGameCard = document.getElementById("new-game")
+    const restartCard = document.getElementById("change-difficulty")
+
+    newGameCard.onpointerdown = (e) => {
+      window.dispatchEvent(new KeyboardEvent("keydown", {code: "KeyR"}))
+    }
+    restartCard.onpointerdown = (e) => {
+      window.location.reload();
+    }
   }
 
   keyStartGame(event) {
@@ -410,22 +423,6 @@ function wasClicked(slot, game, level) {
         game.$timer.style = "color:blue";
         game.$cardsLeft.style = "color:blue";
         game.$cardsLeft.textContent = `${level}-dot game complete!`;
-        
-        // Add buttons for "new {level}-dot game" or "change difficulty"
-        const baize = document.getElementById("baize");
-        const buttonMenu = document.getElementById("button-menu")
-        buttonMenu.style.display = "block"
-        const newGameCard = document.getElementById("new-game")
-        const restartCard = document.getElementById("change-difficulty")
-
-        newGameCard.onpointerdown = () => {
-          buttonMenu.style.display = "none"
-          game.startGame(level)
-        }
-        restartCard.onpointerdown = () => {
-          buttonMenu.style.display = "none"
-          window.location.reload();
-        }
       }
     }
   }
