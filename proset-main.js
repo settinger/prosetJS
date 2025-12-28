@@ -64,6 +64,7 @@ class Card {
       "grey",
       "lime"
     ];
+
     let dot;
     for (let pow = 0; pow < 6; pow++) {
       dot = document.createElement("div");
@@ -129,7 +130,6 @@ class Proset {
     slot6.slot.onclick = () => this.startGame(9);
     // Add a window listener for keypresses
     window.addEventListener("keydown", this.difficultyListener);
-    window.addEventListener("touchstart", this.touchDifficultyListener);
   }
 
   keyStartGame(event) {
@@ -333,7 +333,7 @@ class Proset {
     // Remove existing window listener for keypresses
     // Add new window listener for keypresses
     if (typeof this.keyListener === "undefined") {
-      this.keyListener = e => keyDown(event, this, difficulty);
+      this.keyListener = e => keyDown(e, this, difficulty);
       window.addEventListener("keydown", this.keyListener);
     }
 
@@ -410,6 +410,22 @@ function wasClicked(slot, game, level) {
         game.$timer.style = "color:blue";
         game.$cardsLeft.style = "color:blue";
         game.$cardsLeft.textContent = `${level}-dot game complete!`;
+        
+        // Add buttons for "new {level}-dot game" or "change difficulty"
+        const baize = document.getElementById("baize");
+        const buttonMenu = document.getElementById("button-menu")
+        buttonMenu.style.display = "block"
+        const newGameCard = document.getElementById("new-game")
+        const restartCard = document.getElementById("change-difficulty")
+
+        newGameCard.onpointerdown = () => {
+          buttonMenu.style.display = "none"
+          game.startGame(level)
+        }
+        restartCard.onpointerdown = () => {
+          buttonMenu.style.display = "none"
+          window.location.reload();
+        }
       }
     }
   }
@@ -472,14 +488,7 @@ function keyDown(event, game, level) {
       game.startGame(level);
       break;
     case "Escape":
-      // Replace "score" div text
-      document.getElementById(
-        "score"
-      ).innerHTML = `<div>Click a card to choose difficulty level (fewer dots: easier; more dots: harder)</div>`;
-      // Add a window listener for keypresses
-      window.addEventListener("keydown", this.difficultyListener);
-      window.addEventListener("touchstart", this.touchDifficultyListener);
-      game = new Proset();
+      window.location.reload();
   }
 }
 
