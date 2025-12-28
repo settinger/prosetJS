@@ -141,7 +141,7 @@ class Proset {
       window.dispatchEvent(new KeyboardEvent("keydown", {code: "KeyR"}))
     }
     restartCard.onpointerdown = (e) => {
-      window.location.reload();
+      window.dispatchEvent(new KeyboardEvent("keydown", {code: "Escape"}))
     }
   }
 
@@ -485,7 +485,7 @@ function keyDown(event, game, level) {
       game.startGame(level);
       break;
     case "Escape":
-      window.location.reload();
+      game = new Proset();
   }
 }
 
