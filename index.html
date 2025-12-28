@@ -39,14 +39,10 @@
       const newGameCard = document.getElementById("new-game")
       const restartCard = document.getElementById("change-difficulty")
 
-      newGameCard.onpointerdown = (e) => {
-        window.dispatchEvent(new KeyboardEvent("keydown", {code: "KeyR"}))
-      }
-      restartCard.onpointerdown = (e) => {
-        window.dispatchEvent(new KeyboardEvent("keydown", {code: "Escape"}))
-      }
-
       const game = new Proset();
+
+      newGameCard.onpointerdown = (e) => game.startGame(game.level);
+      restartCard.onpointerdown = (e) => game.Init();
     </script>
   </body>
 </html>

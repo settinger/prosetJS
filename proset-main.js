@@ -95,15 +95,15 @@ class Proset {
   constructor() {
     //this.difficultyListener = e => this.keyStartGame(e);
     this.level = 0; // This needs to be set to 3 thru 9 in order to begin a game
-    this.levelController = new AbortController(); // Initialize a controller to remove level-select listeners once the level is selected
-    this.keyController = new AbortController(); // A different controller for handling keypress listeners during a game
     this.Init();
   }
 
   Init() {
+    this.level = 0;
+
     //console.log(`Entering level select, level set to ${this.level}`)
     const baize = document.getElementById("baize");
-    baize.innerHTML = "";
+    baize.replaceChildren(); // This should remove the existing listeners for level-select clicks
     let numRows = 3;
     // Initialize three rows
     let row0 = new CardRow(0);
@@ -118,61 +118,29 @@ class Proset {
     let slot5 = row2.addSlot(5);
     let slot6 = row2.addSlot(6);
     // Initialize seven cards: 7, 15, 31, 63, 127, 255, 511
-    slot0.addCard(7);
-    slot0.slot.addEventListener("pointerdown", () => this.startGame(3), {signal: this.levelController.signal})
-    slot1.addCard(15);
-    slot1.slot.addEventListener("pointerdown", () => this.startGame(4), {signal: this.levelController.signal})
-    slot2.addCard(31);
-    slot2.slot.addEventListener("pointerdown", () => this.startGame(5), {signal: this.levelController.signal})
-    slot3.addCard(63);
-    slot3.slot.addEventListener("pointerdown", () => this.startGame(6), {signal: this.levelController.signal})
-    slot4.addCard(127);
-    slot4.slot.addEventListener("pointerdown", () => this.startGame(7), {signal: this.levelController.signal})
-    slot5.addCard(255);
-    slot5.slot.addEventListener("pointerdown", () => this.startGame(8), {signal: this.levelController.signal})
-    slot6.addCard(511);
-    slot6.slot.addEventListener("pointerdown", () => this.startGame(9), {signal: this.levelController.signal})
-    // Add a window listener for keypresses
-    window.addEventListener("keydown", (e) => this.keyStartGame(e), {signal: this.levelController.signal});
+    slot0.addCard(0b000000111);
+    slot1.addCard(0b000001111);
+    slot2.addCard(0b000011111);
+    slot3.addCard(0b000111111);
+    slot4.addCard(0b001111111);
+    slot5.addCard(0b011111111);
+    slot6.addCard(0b111111111);
+    slot0.slot.addEventListener("pointerdown", () => this.startGame(3))
+    slot1.slot.addEventListener("pointerdown", () => this.startGame(4))
+    slot2.slot.addEventListener("pointerdown", () => this.startGame(5))
+    slot3.slot.addEventListener("pointerdown", () => this.startGame(6))
+    slot4.slot.addEventListener("pointerdown", () => this.startGame(7))
+    slot5.slot.addEventListener("pointerdown", () => this.startGame(8))
+    slot6.slot.addEventListener("pointerdown", () => this.startGame(9))
   }
 
-  keyStartGame(event) {
-    let key = event.code;
-    switch (key) {
-      case "Digit1":
-        this.startGame(3);
-        break;
-      case "Digit2":
-        this.startGame(4);
-        break;
-      case "Digit3":
-        this.startGame(5);
-        break;
-      case "Digit4":
-        this.startGame(6);
-        break;
-      case "Digit5":
-        this.startGame(7);
-        break;
-      case "Digit6":
-        this.startGame(8);
-        break;
-      case "Digit7":
-        this.startGame(9);
-        break;
-    }
-  }
 
   startGame(difficulty) {
-    //console.log(`Starting a game at level ${difficulty}`)
-    // Delete existing keyboard listener
-    this.levelController.abort();
-    this.levelController = new AbortController();
-    //this.keyController.abort();
+    this.level = difficulty;
 
     // Delete existing rows
     const baize = document.getElementById("baize");
-    baize.innerHTML = "";
+    baize.replaceChildren(); // This should remove existing pointerdown listeners (from level select or in-progress game)
 
     this.row0 = new CardRow(0);
     this.row1 = new CardRow(1);
@@ -185,7 +153,8 @@ class Proset {
         this.slot1 = this.row0.addSlot(1);
         this.slot2 = this.row1.addSlot(2);
         this.slot3 = this.row1.addSlot(3);
-        this.slots = [this.slot0, this.slot1, this.slot2, this.slot3];
+        this.slots = [this.slot0, this.slot1,
+                      this.slot2, this.slot3];
         break;
       case 4:
         this.slot0 = this.row0.addSlot(0);
@@ -193,13 +162,8 @@ class Proset {
         this.slot2 = this.row1.addSlot(2);
         this.slot3 = this.row1.addSlot(3);
         this.slot4 = this.row1.addSlot(4);
-        this.slots = [
-          this.slot0,
-          this.slot1,
-          this.slot2,
-          this.slot3,
-          this.slot4
-        ];
+        this.slots = [this.slot0, this.slot1,
+                this.slot2, this.slot3, this.slot4];
         break;
       case 5:
         this.slot0 = this.row0.addSlot(0);
@@ -209,14 +173,9 @@ class Proset {
         this.slot3 = this.row1.addSlot(3);
         this.slot4 = this.row2.addSlot(4);
         this.slot5 = this.row2.addSlot(5);
-        this.slots = [
-          this.slot0,
-          this.slot1,
-          this.slot2,
-          this.slot3,
-          this.slot4,
-          this.slot5
-        ];
+        this.slots = [this.slot0, this.slot1,
+                this.slot2,             this.slot3,
+                      this.slot4, this.slot5];
         break;
       case 6:
         this.slot0 = this.row0.addSlot(0);
@@ -226,15 +185,9 @@ class Proset {
         this.slot4 = this.row1.addSlot(4);
         this.slot5 = this.row2.addSlot(5);
         this.slot6 = this.row2.addSlot(6);
-        this.slots = [
-          this.slot0,
-          this.slot1,
-          this.slot2,
-          this.slot3,
-          this.slot4,
-          this.slot5,
-          this.slot6
-        ];
+        this.slots = [this.slot0, this.slot1,
+                this.slot2, this.slot3, this.slot4,
+                      this.slot5, this.slot6];
         break;
       case 7:
         this.slot0 = this.row0.addSlot(0);
@@ -245,16 +198,9 @@ class Proset {
         this.slot5 = this.row2.addSlot(5);
         this.slot6 = this.row2.addSlot(6);
         this.slot7 = this.row2.addSlot(7);
-        this.slots = [
-          this.slot0,
-          this.slot1,
-          this.slot2,
-          this.slot3,
-          this.slot4,
-          this.slot5,
-          this.slot6,
-          this.slot7
-        ];
+        this.slots = [this.slot0, this.slot1, this.slot2,
+                            this.slot3, this.slot4,
+                      this.slot5, this.slot6, this.slot7];
         break;
       case 8:
         this.slot0 = this.row0.addSlot(0);
@@ -266,17 +212,9 @@ class Proset {
         this.slot6 = this.row2.addSlot(6);
         this.slot7 = this.row2.addSlot(7);
         this.slot8 = this.row2.addSlot(8);
-        this.slots = [
-          this.slot0,
-          this.slot1,
-          this.slot2,
-          this.slot3,
-          this.slot4,
-          this.slot5,
-          this.slot6,
-          this.slot7,
-          this.slot8
-        ];
+        this.slots = [this.slot0, this.slot1, this.slot2,
+                      this.slot3, this.slot4, this.slot5,
+                      this.slot6, this.slot7, this.slot8];
         break;
       case 9:
         this.slot0 = this.row0.addSlot(0);
@@ -289,23 +227,11 @@ class Proset {
         this.slot7 = this.row2.addSlot(7);
         this.slot8 = this.row2.addSlot(8);
         this.slot9 = this.row2.addSlot(9);
-        this.slots = [
-          this.slot0,
-          this.slot1,
-          this.slot2,
-          this.slot3,
-          this.slot4,
-          this.slot5,
-          this.slot6,
-          this.slot7,
-          this.slot8,
-          this.slot9
-        ];
+        this.slots = [this.slot0, this.slot1, this.slot2,
+                this.slot3, this.slot4, this.slot5, this.slot6,
+                      this.slot7, this.slot8, this.slot9];
         break;
       default:
-        this.levelController.abort()
-        this.levelController = new AbortController();
-        //this.keyController.abort();
         this.Init();
     }
     this.deck = new Deck(2 ** difficulty);
@@ -330,26 +256,13 @@ class Proset {
     this.$cardsLeft = document.getElementById("cardsspan");
     this.$cardsLeft.textContent = `Cards in deck: ${this.deck.deck.length}`;
 
-    // Remove existing window listener for keypresses
-    this.keyController.abort()
-    this.keyController = new AbortController();
-
-    // Set onClick functions
+    // Set pointerdown functions for each card slot
     for (let startSlot of this.slots) {
-      //startSlot.slot.onclick = function() {wasClicked(startSlot, game, deck, difficulty);};
       startSlot.slot.addEventListener("pointerdown", e => {
         e.preventDefault();
         wasClicked(startSlot, game, difficulty);
-      }, {signal: this.keyController.signal});
+      });
     }
-
-    window.addEventListener("keydown", (e) => keyDown(e, this, difficulty), {signal: this.keyController.signal})
-    // Add new window listener for keypresses
-    //this.keyListener = undefined
-    //if (typeof this.keyListener === "undefined") {
-    //  this.keyListener = e => keyDown(e, this, difficulty);
-    //  window.addEventListener("keydown", this.keyListener);
-    //}
 
     // Initialize array of selected slots
     this.selected = [];
@@ -357,7 +270,7 @@ class Proset {
 
   updateTimer(init, $timer) {
     let elapsed = new Date() - init;
-    let timeStr = new Date(elapsed).toISOString().substr(11, 8);
+    let timeStr = new Date(elapsed).toISOString().substring(11, 19);
     $timer.textContent = timeStr;
   }
 }
@@ -444,54 +357,6 @@ function won(game, deck) {
     }
   }
   return true;
-}
-
-function keyDown(event, game, level) {
-  let key = event.code;
-  switch (key) {
-    case "Digit1":
-      if (level > 0) wasClicked(game.slots[0], game, level);
-      break;
-    case "Digit2":
-      if (level > 1) wasClicked(game.slots[1], game, level);
-      break;
-    case "Digit3":
-      if (level > 2) wasClicked(game.slots[2], game, level);
-      break;
-    case "Digit4":
-      if (level > 2) wasClicked(game.slots[3], game, level);
-      break;
-    case "Digit5":
-      if (level > 3) wasClicked(game.slots[4], game, level);
-      break;
-    case "Digit6":
-      if (level > 4) wasClicked(game.slots[5], game, level);
-      break;
-    case "Digit7":
-      if (level > 5) wasClicked(game.slots[6], game, level);
-      break;
-    case "Digit8":
-      if (level > 6) wasClicked(game.slots[7], game, level);
-      break;
-    case "Digit9":
-      if (level > 7) wasClicked(game.slots[8], game, level);
-      break;
-    case "Digit0":
-      if (level > 8) wasClicked(game.slots[9], game, level);
-      break;
-    case "KeyC":
-      clearSelected(game, level);
-      break;
-    case "KeyR":
-      game.startGame(level);
-      break;
-    case "Escape":
-      this.keyController?.abort();
-      this.levelController?.abort();
-      this.keyController = new AbortController();
-      this.levelController = new AbortController();
-      game.Init();
-  }
 }
 
 function clearSelected(game, level) {
