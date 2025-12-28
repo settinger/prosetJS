@@ -35,7 +35,18 @@
     </div>
     <script src="proset-main.js"></script>
     <script>
-      let game = new Proset();
+      const buttonMenu = document.getElementById("button-menu")
+      const newGameCard = document.getElementById("new-game")
+      const restartCard = document.getElementById("change-difficulty")
+
+      newGameCard.onpointerdown = (e) => {
+        window.dispatchEvent(new KeyboardEvent("keydown", {code: "KeyR"}))
+      }
+      restartCard.onpointerdown = (e) => {
+        window.dispatchEvent(new KeyboardEvent("keydown", {code: "Escape"}))
+      }
+
+      const game = new Proset();
     </script>
   </body>
 </html>

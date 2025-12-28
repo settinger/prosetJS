@@ -93,11 +93,15 @@ class Card {
 
 class Proset {
   constructor() {
-    this.difficultyListener = e => this.keyStartGame(e);
+    //this.difficultyListener = e => this.keyStartGame(e);
+    this.level = 0; // This needs to be set to 3 thru 9 in order to begin a game
+    this.levelController = new AbortController(); // Initialize a controller to remove level-select listeners once the level is selected
+    this.keyController = new AbortController(); // A different controller for handling keypress listeners during a game
     this.Init();
   }
 
   Init() {
+    //console.log(`Entering level select, level set to ${this.level}`)
     const baize = document.getElementById("baize");
     baize.innerHTML = "";
     let numRows = 3;
@@ -115,34 +119,21 @@ class Proset {
     let slot6 = row2.addSlot(6);
     // Initialize seven cards: 7, 15, 31, 63, 127, 255, 511
     slot0.addCard(7);
-    slot0.slot.onclick = () => this.startGame(3);
+    slot0.slot.addEventListener("pointerdown", () => this.startGame(3), {signal: this.levelController.signal})
     slot1.addCard(15);
-    slot1.slot.onclick = () => this.startGame(4);
+    slot1.slot.addEventListener("pointerdown", () => this.startGame(4), {signal: this.levelController.signal})
     slot2.addCard(31);
-    slot2.slot.onclick = () => this.startGame(5);
+    slot2.slot.addEventListener("pointerdown", () => this.startGame(5), {signal: this.levelController.signal})
     slot3.addCard(63);
-    slot3.slot.onclick = () => this.startGame(6);
+    slot3.slot.addEventListener("pointerdown", () => this.startGame(6), {signal: this.levelController.signal})
     slot4.addCard(127);
-    slot4.slot.onclick = () => this.startGame(7);
+    slot4.slot.addEventListener("pointerdown", () => this.startGame(7), {signal: this.levelController.signal})
     slot5.addCard(255);
-    slot5.slot.onclick = () => this.startGame(8);
+    slot5.slot.addEventListener("pointerdown", () => this.startGame(8), {signal: this.levelController.signal})
     slot6.addCard(511);
-    slot6.slot.onclick = () => this.startGame(9);
+    slot6.slot.addEventListener("pointerdown", () => this.startGame(9), {signal: this.levelController.signal})
     // Add a window listener for keypresses
-    window.addEventListener("keydown", this.difficultyListener);
-
-    // Add buttons for "new {level}-dot game" or "change difficulty"
-    const buttonMenu = document.getElementById("button-menu")
-    buttonMenu.style.display = "block"
-    const newGameCard = document.getElementById("new-game")
-    const restartCard = document.getElementById("change-difficulty")
-
-    newGameCard.onpointerdown = (e) => {
-      window.dispatchEvent(new KeyboardEvent("keydown", {code: "KeyR"}))
-    }
-    restartCard.onpointerdown = (e) => {
-      window.dispatchEvent(new KeyboardEvent("keydown", {code: "Escape"}))
-    }
+    window.addEventListener("keydown", (e) => this.keyStartGame(e), {signal: this.levelController.signal});
   }
 
   keyStartGame(event) {
@@ -170,12 +161,14 @@ class Proset {
         this.startGame(9);
         break;
     }
-    window.removeEventListener("keydown", this.difficultyListener);
   }
 
   startGame(difficulty) {
+    //console.log(`Starting a game at level ${difficulty}`)
     // Delete existing keyboard listener
-    window.removeEventListener("keydown", this.difficultyListener);
+    this.levelController.abort();
+    this.levelController = new AbortController();
+    //this.keyController.abort();
 
     // Delete existing rows
     const baize = document.getElementById("baize");
@@ -310,6 +303,9 @@ class Proset {
         ];
         break;
       default:
+        this.levelController.abort()
+        this.levelController = new AbortController();
+        //this.keyController.abort();
         this.Init();
     }
     this.deck = new Deck(2 ** difficulty);
@@ -334,21 +330,26 @@ class Proset {
     this.$cardsLeft = document.getElementById("cardsspan");
     this.$cardsLeft.textContent = `Cards in deck: ${this.deck.deck.length}`;
 
+    // Remove existing window listener for keypresses
+    this.keyController.abort()
+    this.keyController = new AbortController();
+
     // Set onClick functions
     for (let startSlot of this.slots) {
       //startSlot.slot.onclick = function() {wasClicked(startSlot, game, deck, difficulty);};
       startSlot.slot.addEventListener("pointerdown", e => {
         e.preventDefault();
         wasClicked(startSlot, game, difficulty);
-      });
+      }, {signal: this.keyController.signal});
     }
 
-    // Remove existing window listener for keypresses
+    window.addEventListener("keydown", (e) => keyDown(e, this, difficulty), {signal: this.keyController.signal})
     // Add new window listener for keypresses
-    if (typeof this.keyListener === "undefined") {
-      this.keyListener = e => keyDown(e, this, difficulty);
-      window.addEventListener("keydown", this.keyListener);
-    }
+    //this.keyListener = undefined
+    //if (typeof this.keyListener === "undefined") {
+    //  this.keyListener = e => keyDown(e, this, difficulty);
+    //  window.addEventListener("keydown", this.keyListener);
+    //}
 
     // Initialize array of selected slots
     this.selected = [];
@@ -485,6 +486,10 @@ function keyDown(event, game, level) {
       game.startGame(level);
       break;
     case "Escape":
+      this.keyController?.abort();
+      this.levelController?.abort();
+      this.keyController = new AbortController();
+      this.levelController = new AbortController();
       game.Init();
   }
 }
