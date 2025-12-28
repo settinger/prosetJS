@@ -485,7 +485,7 @@ function keyDown(event, game, level) {
       game.startGame(level);
       break;
     case "Escape":
-      game = new Proset();
+      game.Init();
   }
 }
 
