@@ -16,7 +16,7 @@
     <div id="baize" class="baize">
       <!-- -->
     </div>
-    <div class="rules">
+    <div id="rules" class="rules">
       <p><b>Rule:</b> Select a set of cards such that there is an even number of dots each color.</p>
     </div>
     <div id="button-menu" class="baize">
@@ -35,6 +35,15 @@
     </div>
     <script src="proset-main.js"></script>
     <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('pwa-serviceworker.js');
+        const rules = document.getElementById("rules");
+        const version = document.createElement("p");
+        version.innerHTML = `<b>version 25.12.18.16.15</b>`;
+        rules.appendChild(version);
+      } else {
+      }
+
       const buttonMenu = document.getElementById("button-menu")
       const newGameCard = document.getElementById("new-game")
       const restartCard = document.getElementById("change-difficulty")

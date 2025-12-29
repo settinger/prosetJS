@@ -1,7 +1,7 @@
 {
   "name": "Projective Set",
   "short_name": "Pro Set",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "icons": [
     {
